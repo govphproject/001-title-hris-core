@@ -1,0 +1,121 @@
+openapi: 3.0.1
+info:
+  title: HRIS Core - Employees API
+  version: '0.1.0'
+paths:
+  /employees:
+    get:
+      summary: List employees
+      responses:
+        '200':
+          description: A paginated list of employees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Employee'
+                  total:
+                    type: integer
+    post:
+      summary: Create employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeCreate'
+      responses:
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+  /employees/{employee_id}:
+    get:
+      summary: Get employee
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Employee record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+    put:
+      summary: Update employee
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeUpdate'
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+    delete:
+      summary: Archive employee
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Employee archived
+
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        employee_id:
+          type: string
+        legal_name:
+          type: object
+          properties:
+            first: { type: string }
+            last: { type: string }
+        preferred_name: { type: string }
+        email: { type: string }
+        employment_status: { type: string }
+        hire_date: { type: string, format: date }
+        termination_date: { type: string, format: date }
+        version: { type: integer }
+
+    EmployeeCreate:
+      type: object
+      required: [legal_name, email, hire_date]
+      properties:
+        legal_name:
+          $ref: '#/components/schemas/Employee/properties/legal_name'
+        email: { type: string }
+        hire_date: { type: string, format: date }
+
+    EmployeeUpdate:
+      type: object
+      properties:
+        preferred_name: { type: string }
+        email: { type: string }
+        employment_status: { type: string }
+        version: { type: integer }

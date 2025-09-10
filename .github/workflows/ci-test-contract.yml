@@ -1,0 +1,67 @@
+name: CI - Contract Tests
+
+on:
+  push:
+    branches: [ main, "001-title-hris-core" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand({ ping: 1 })'" --health-interval 5s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ${{ runner.tool_cache }}/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Wait for Mongo
+        run: |
+          for i in $(seq 1 30); do
+            mongosh --eval 'db.adminCommand({ ping: 1 })' && break || sleep 1
+          done
+
+      - name: Run migrations
+        run: |
+          cd backend
+          # build and run the migration to normalize legacy employee documents before starting server
+          go build ./cmd/migrate
+          MONGO_URI="mongodb://localhost:27017" ./migrate
+          # cleanup binary to keep workspace tidy
+          rm -f migrate
+
+      - name: Start backend
+        run: |
+          cd backend
+          HRIS_JWT_SECRET=test-jwt-secret MONGO_URI="mongodb://localhost:27017" MONGO_DB=hris MONGO_COLLECTION=employees nohup go run . > backend.log 2>&1 &
+          # wait for health
+          for i in $(seq 1 30); do
+            curl -sSf http://localhost:8080/health && break || sleep 1
+          done
+
+      - name: Run contract tests
+        env:
+          HRIS_TEST_EXTERNAL: '1'
+        run: |
+          cd backend
+          go test ./tests/contract -v
