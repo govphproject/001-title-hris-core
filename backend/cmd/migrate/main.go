@@ -94,7 +94,9 @@ func main() {
 	filled := 0
 	for cur2.Next(ctx) {
 		var d bson.M
-		if err := cur2.Decode(&d); err != nil { continue }
+		if err := cur2.Decode(&d); err != nil {
+			continue
+		}
 		if v, ok := d["employeeid"]; ok {
 			if _, exists := d["employee_id"]; !exists {
 				if _, err := coll.UpdateOne(ctx, bson.M{"_id": d["_id"]}, bson.M{"$set": bson.M{"employee_id": v}, "$unset": bson.M{"employeeid": ""}}); err == nil {
