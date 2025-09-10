@@ -57,7 +57,8 @@ func startRecruitServer() *httptest.Server {
 			return
 		}
 		var in struct {
-			FullName, Email string `json:"full_name"`
+			FullName string `json:"full_name"`
+			Email    string `json:"email"`
 		}
 		if err := c.BindJSON(&in); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid"})
