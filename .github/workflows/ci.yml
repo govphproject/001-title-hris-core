@@ -37,6 +37,8 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.0
 
-      - name: Run golangci-lint
+      - name: Run golangci-lint (backend module)
+        working-directory: backend
         run: |
-          $(go env GOPATH)/bin/golangci-lint run ./...
+          export PATH="$PATH:$(go env GOPATH)/bin"
+          golangci-lint run ./...
