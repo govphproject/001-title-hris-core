@@ -43,3 +43,14 @@ Labels (suggested)
 Notes
 -----
 If you want I can attempt to open the PR via GitHub CLI; earlier the workspace attempted this and the account lacked permissions. This file is provided so you can open the PR manually or forward to a maintainer.
+
+Commits in this branch
+-----------------------
+- 2b7e648 docs: add PR draft for chore/migrate-jwt-tests
+- 8bfe169 ci: add GitHub Actions workflow for build/test/lint
+- 2004b6f style: gofmt payroll files
+- 356bb74 feat(payroll): add CalculateNet helper and unit test; fix recruitment test json tag
+- 7aea4dc style: gofmt applied to backend files
+- 446999a tests: fix duplicated/ corrupted payroll_integration_test.go
+- 2e035fd docs: add release notes for migration + JWT hardening
+- 5b0c70b first commit
