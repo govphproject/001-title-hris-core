@@ -114,7 +114,7 @@ func main() {
 	fmt.Printf("filled %d missing employee_id\n", filled)
 
 	// 3) create index (non-partial for better portability); duplicates should be resolved by previous steps
-	idxModel := mongo.IndexModel{Keys: bson.D{{Key: "employee_id", Value: 1}}, Options: options.Index().SetUnique(true).SetBackground(false)}
+	idxModel := mongo.IndexModel{Keys: bson.D{bson.E{Key: "employee_id", Value: 1}}, Options: options.Index().SetUnique(true)}
 	if _, err := coll.Indexes().CreateOne(ctx, idxModel); err != nil {
 		log.Printf("index create warning: %v", err)
 	} else {
