@@ -10,17 +10,17 @@ import (
 )
 
 func TestRegisterDepartmentRoutes(t *testing.T) {
-    gin.SetMode(gin.TestMode)
-    r := gin.New()
-    g := r.Group("/api")
-    repo := services.NewInMemoryDepartmentRepo()
-    RegisterDepartmentRoutes(g, repo)
+	gin.SetMode(gin.TestMode)
+	r := gin.New()
+	g := r.Group("/api")
+	repo := services.NewInMemoryDepartmentRepo()
+	RegisterDepartmentRoutes(g, repo)
 
-    // list
-    req := httptest.NewRequest(http.MethodGet, "/api/departments", nil)
-    w := httptest.NewRecorder()
-    r.ServeHTTP(w, req)
-    if w.Code == http.StatusNotFound {
-        t.Fatalf("departments list route not registered; got 404")
-    }
+	// list
+	req := httptest.NewRequest(http.MethodGet, "/api/departments", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	if w.Code == http.StatusNotFound {
+		t.Fatalf("departments list route not registered; got 404")
+	}
 }
