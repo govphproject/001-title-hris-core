@@ -1,13 +1,13 @@
 package api
 
 import (
-    "context"
-    "fmt"
-    "net/http"
-    "time"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
 
-    "github.com/gin-gonic/gin"
-    "github.com/ronaldpalay/hris/src/services"
+	"github.com/gin-gonic/gin"
+	"github.com/ronaldpalay/hris/src/services"
 )
 
 func RegisterPayrollRoutes(rg *gin.RouterGroup, repo services.PayrollRepo) {

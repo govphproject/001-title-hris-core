@@ -1,12 +1,12 @@
 package services
 
 import (
-    "context"
+	"context"
 
-    "golang.org/x/crypto/bcrypt"
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // AuthStore defines the methods an auth backing store must implement.

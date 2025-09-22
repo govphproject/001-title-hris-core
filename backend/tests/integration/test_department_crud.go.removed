@@ -1,0 +1,6 @@
+This file was removed because it duplicated declarations from
+`test_department_crud_test.go` (Department, startDeptServer, TestDepartmentCRUDAndLinking)
+which caused `go test` to fail with redeclared symbol errors.
+
+If you need to restore it, check the contents of the repository history or
+use the canonical test file `test_department_crud_test.go` instead.

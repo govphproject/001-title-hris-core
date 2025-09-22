@@ -1,11 +1,11 @@
 package db
 
 import (
-    "context"
-    "time"
+	"context"
+	"time"
 
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // Connect establishes a MongoDB client using the provided URI and returns it.

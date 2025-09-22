@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
   title: HRIS Core - Employees API
-  version: '0.1.0'
+  version: "0.1.0"
 paths:
   /employees:
     get:
       summary: List employees
       responses:
-        '200':
+        "200":
           description: A paginated list of employees
           content:
             application/json:
@@ -17,7 +17,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Employee'
+                      $ref: "#/components/schemas/Employee"
                   total:
                     type: integer
     post:
@@ -27,14 +27,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EmployeeCreate'
+              $ref: "#/components/schemas/EmployeeCreate"
       responses:
-        '201':
+        "201":
           description: Employee created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Employee'
+                $ref: "#/components/schemas/Employee"
   /employees/{employee_id}:
     get:
       summary: Get employee
@@ -45,12 +45,12 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Employee record
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Employee'
+                $ref: "#/components/schemas/Employee"
     put:
       summary: Update employee
       parameters:
@@ -64,14 +64,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EmployeeUpdate'
+              $ref: "#/components/schemas/EmployeeUpdate"
       responses:
-        '200':
+        "200":
           description: Employee updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Employee'
+                $ref: "#/components/schemas/Employee"
     delete:
       summary: Archive employee
       parameters:
@@ -81,7 +81,7 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: Employee archived
 
 components:
@@ -108,7 +108,7 @@ components:
       required: [legal_name, email, hire_date]
       properties:
         legal_name:
-          $ref: '#/components/schemas/Employee/properties/legal_name'
+          $ref: "#/components/schemas/Employee/properties/legal_name"
         email: { type: string }
         hire_date: { type: string, format: date }
 

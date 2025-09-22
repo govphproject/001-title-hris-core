@@ -1,4 +1,4 @@
-````markdown
+```markdown
 # Contract Tests (placeholders) — HRIS Core
 
 These tests are generated from API contracts and should fail until the backend implements the API.
@@ -12,4 +12,4 @@ These tests are generated from API contracts and should fail until the backend i
 Implementations should provide automated tests mirroring these scenarios.
 
 ---
-````
+```

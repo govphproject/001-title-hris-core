@@ -1,12 +1,12 @@
 package services
 
 import (
-    "context"
-    "errors"
-    "sync"
+	"context"
+	"errors"
+	"sync"
 
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // EmployeeRepo defines storage operations for employee-like documents.

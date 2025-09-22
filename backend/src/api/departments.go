@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -10,8 +9,8 @@ import (
 	"github.com/ronaldpalay/hris/src/services"
 )
 
-func RegisterEmployeeRoutes(rg *gin.RouterGroup, repo services.EmployeeRepo) {
-    rg.GET("/employees", func(c *gin.Context) {
+func RegisterDepartmentRoutes(rg *gin.RouterGroup, repo services.DepartmentRepo) {
+    rg.GET("/departments", func(c *gin.Context) {
         ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
         defer cancel()
         items, err := repo.List(ctx)
@@ -22,17 +21,15 @@ func RegisterEmployeeRoutes(rg *gin.RouterGroup, repo services.EmployeeRepo) {
         c.JSON(http.StatusOK, gin.H{"items": items, "total": len(items)})
     })
 
-    rg.POST("/employees", func(c *gin.Context) {
+    rg.POST("/departments", func(c *gin.Context) {
         var in map[string]interface{}
         if err := c.BindJSON(&in); err != nil {
             c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
             return
         }
-        if in["employee_id"] == nil {
-            in["employee_id"] = fmt.Sprintf("emp-%d", time.Now().UnixNano())
-        }
-        if in["version"] == nil {
-            in["version"] = 1
+        if in["id"] == nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": "id required"})
+            return
         }
         ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
         defer cancel()
@@ -44,7 +41,7 @@ func RegisterEmployeeRoutes(rg *gin.RouterGroup, repo services.EmployeeRepo) {
         c.JSON(http.StatusCreated, doc)
     })
 
-    rg.GET("/employees/:id", func(c *gin.Context) {
+    rg.GET("/departments/:id", func(c *gin.Context) {
         id := c.Param("id")
         ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
         defer cancel()
@@ -56,33 +53,24 @@ func RegisterEmployeeRoutes(rg *gin.RouterGroup, repo services.EmployeeRepo) {
         c.JSON(http.StatusOK, doc)
     })
 
-    rg.PUT("/employees/:id", func(c *gin.Context) {
+    rg.PUT("/departments/:id", func(c *gin.Context) {
         id := c.Param("id")
         var in map[string]interface{}
         if err := c.BindJSON(&in); err != nil {
             c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
             return
         }
-        var expected *int
-        if v, ok := in["version"].(float64); ok {
-            vv := int(v)
-            expected = &vv
-        }
         ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
         defer cancel()
-        doc, err := repo.Update(ctx, id, in, expected)
+        doc, err := repo.Update(ctx, id, in, nil)
         if err != nil {
-            if err.Error() == "version mismatch" {
-                c.JSON(http.StatusConflict, gin.H{"error": "version mismatch"})
-                return
-            }
             c.JSON(http.StatusInternalServerError, gin.H{"error": "db update failed"})
             return
         }
         c.JSON(http.StatusOK, doc)
     })
 
-    rg.DELETE("/employees/:id", func(c *gin.Context) {
+    rg.DELETE("/departments/:id", func(c *gin.Context) {
         id := c.Param("id")
         ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
         defer cancel()
@@ -91,5 +79,38 @@ func RegisterEmployeeRoutes(rg *gin.RouterGroup, repo services.EmployeeRepo) {
             return
         }
         c.Status(http.StatusNoContent)
+    })
+
+    // linking endpoints
+    rg.POST("/departments/:id/employees", func(c *gin.Context) {
+        id := c.Param("id")
+        var in struct{
+            EmployeeID string `json:"employee_id"`
+        }
+        if err := c.BindJSON(&in); err != nil || in.EmployeeID == "" {
+            c.JSON(http.StatusBadRequest, gin.H{"error": "employee_id required"})
+            return
+        }
+        // use service for linking logic
+        // lightweight: create a temporary service using repo
+        svc := services.NewDepartmentService(repo)
+        doc, err := svc.AddEmployee(c.Request.Context(), id, in.EmployeeID)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "link failed"})
+            return
+        }
+        c.JSON(http.StatusOK, doc)
+    })
+
+    rg.DELETE("/departments/:id/employees/:emp", func(c *gin.Context) {
+        id := c.Param("id")
+        emp := c.Param("emp")
+        svc := services.NewDepartmentService(repo)
+        doc, err := svc.RemoveEmployee(c.Request.Context(), id, emp)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "unlink failed"})
+            return
+        }
+        c.JSON(http.StatusOK, doc)
     })
 }

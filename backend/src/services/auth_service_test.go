@@ -1,8 +1,8 @@
 package services
 
 import (
-    "context"
-    "testing"
+	"context"
+	"testing"
 )
 
 func TestInMemoryUserStore_CreateAndValidate(t *testing.T) {

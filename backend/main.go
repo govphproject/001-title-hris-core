@@ -13,9 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/ronaldpalay/hris/src/services"
-	"github.com/ronaldpalay/hris/src/middleware"
 	apipkg "github.com/ronaldpalay/hris/src/api"
+	"github.com/ronaldpalay/hris/src/middleware"
+	"github.com/ronaldpalay/hris/src/services"
 )
 
 type Employee struct {

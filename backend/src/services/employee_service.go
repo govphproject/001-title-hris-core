@@ -1,13 +1,13 @@
 package services
 
 import (
-    "context"
-    "errors"
-    "fmt"
-    "net/mail"
-    "sort"
-    "strings"
-    "time"
+	"context"
+	"errors"
+	"fmt"
+	"net/mail"
+	"sort"
+	"strings"
+	"time"
 )
 
 // EmployeeService provides CRUD for employees and validation around the repo.

@@ -1,9 +1,10 @@
 package models
 
-// OrganizationUnit represents a department or unit in the org chart.
+// OrganizationUnit represents a department or unit within the organization.
 type OrganizationUnit struct {
-    UnitID   string `bson:"unit_id" json:"unit_id"`
-    Name     string `bson:"name" json:"name"`
-    ParentID string `bson:"parent_id,omitempty" json:"parent_id,omitempty"`
-    Version  int    `bson:"version,omitempty" json:"version,omitempty"`
+    ID          string   `json:"id" bson:"_id"`
+    Name        string   `json:"name" bson:"name"`
+    Description string   `json:"description,omitempty" bson:"description,omitempty"`
+    EmployeeIDs []string `json:"employee_ids,omitempty" bson:"employee_ids,omitempty"`
+    Version     int      `json:"version" bson:"version"`
 }

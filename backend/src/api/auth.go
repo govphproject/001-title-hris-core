@@ -1,13 +1,13 @@
 package api
 
 import (
-    "context"
-    "net/http"
-    "time"
+	"context"
+	"net/http"
+	"time"
 
-    "github.com/gin-gonic/gin"
-    "github.com/golang-jwt/jwt/v5"
-    "github.com/ronaldpalay/hris/src/services"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/ronaldpalay/hris/src/services"
 )
 
 // RegisterAuthRoutes registers auth routes on the given router group.

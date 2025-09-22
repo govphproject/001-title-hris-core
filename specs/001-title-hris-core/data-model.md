@@ -1,4 +1,4 @@
-````markdown
+```markdown
 # Data Model: HRIS Core — Phase 1
 
 **Source Spec**: /Users/ronaldpalay/Sourcecode/Projects/WebDevelopment/hris/specs/001-title-hris-core/spec.md
@@ -7,6 +7,7 @@
 ## Entities
 
 ### Employee
+
 - employee_id: string (canonical)
 - legal_name: {first, middle?, last}
 - preferred_name: string?
@@ -24,6 +25,7 @@
 - version: integer (for optimistic locking)
 
 ### UserAccount
+
 - account_id: string
 - employee_id: string?
 - username/email: string
@@ -32,11 +34,13 @@
 - status: enum (active, suspended)
 
 ### Role
+
 - role_id: string
 - name: string
 - permissions: array of permission keys
 
 ### PayrollRecord
+
 - payroll_id: string
 - employee_id: string
 - pay_period_start: date
@@ -49,6 +53,7 @@
 - exported: boolean
 
 ### LeaveRequest
+
 - request_id: string
 - employee_id: string
 - type: enum (vacation, sick, unpaid, etc.)
@@ -59,6 +64,7 @@
 - approver_history: array of {approver_id, action, timestamp, comment}
 
 ### AttendanceRecord
+
 - attendance_id: string
 - employee_id: string
 - timestamp: datetime
@@ -66,30 +72,37 @@
 - source_system: string?
 
 ### Candidate
+
 - candidate_id: string
 - name, contacts, resume_ref, stage_history, outcome
 
 ### PerformanceReview
+
 - review_id: string
 - employee_id, reviewer_id, cycle, goals, ratings, comments, status
 
 ### TrainingRecord
+
 - training_id, employee_id, course_id, completion_date, certificate_ref, expiry_date
 
 ### BenefitPlan
+
 - plan_id, name, coverage_summary, eligibility_criteria
 
 ### OrganizationUnit
+
 - org_id, name, parent_id?, location, cost_center
 
 ## Indexing & Queries (suggested)
+
 - Index employee_id, email, department, manager_id for directory queries.
 - TTL/archival indices for terminated employees based on retention policy.
 
 ## Validation Rules (high level)
+
 - employee_id required and unique.
 - email must be RFC-compliant when provided.
 - hire_date <= termination_date when termination_date present.
 
 ---
-````
+```

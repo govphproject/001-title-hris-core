@@ -1,12 +1,12 @@
 package middleware
 
 import (
-    "fmt"
-    "net/http"
-    "strings"
+	"fmt"
+	"net/http"
+	"strings"
 
-    "github.com/gin-gonic/gin"
-    "github.com/golang-jwt/jwt/v5"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 // parseToken parses the JWT token string and returns the claims if valid.
