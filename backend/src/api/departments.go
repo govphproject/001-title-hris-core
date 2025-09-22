@@ -102,6 +102,20 @@ func RegisterDepartmentRoutes(rg *gin.RouterGroup, repo services.DepartmentRepo)
 		c.JSON(http.StatusOK, doc)
 	})
 
+	rg.GET("/departments/:id/employees", func(c *gin.Context) {
+		id := c.Param("id")
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		d, err := repo.Get(ctx, id)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+			return
+		}
+		// ensure employee_ids present
+		ids, _ := d["employee_ids"].([]string)
+		c.JSON(http.StatusOK, gin.H{"items": ids, "total": len(ids)})
+	})
+
 	rg.DELETE("/departments/:id/employees/:emp", func(c *gin.Context) {
 		id := c.Param("id")
 		emp := c.Param("emp")

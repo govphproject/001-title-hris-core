@@ -9,10 +9,8 @@ linters:
     - gofmt
     - gosimple
     - unused
-    - structcheck
-    - varcheck
     - ineffassign
-    - deadcode
-  disable:
-    - typecheck
+  # No linters disabled
+
+ 
  

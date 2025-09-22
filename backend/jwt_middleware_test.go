@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	mw "github.com/ronaldpalay/hris/src/middleware"
 )
 
 func genToken(t *testing.T, roles interface{}, tamperAlg bool) string {
@@ -18,7 +19,7 @@ func genToken(t *testing.T, roles interface{}, tamperAlg bool) string {
 		// change header alg to simulate unexpected signing method
 		tok.Header["alg"] = "RS256"
 	}
-	s, err := tok.SignedString(jwtSecret)
+	s, err := tok.SignedString([]byte("secret"))
 	if err != nil {
 		t.Fatalf("signed token: %v", err)
 	}
@@ -28,7 +29,7 @@ func genToken(t *testing.T, roles interface{}, tamperAlg bool) string {
 func TestAuthMiddleware_AllowsValidToken(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.GET("/ok", AuthMiddleware(), func(c *gin.Context) { c.Status(http.StatusOK) })
+	r.GET("/ok", mw.AuthMiddleware([]byte("secret")), func(c *gin.Context) { c.Status(http.StatusOK) })
 
 	req := httptest.NewRequest(http.MethodGet, "/ok", nil)
 	token := genToken(t, []string{"admin"}, false)
@@ -43,7 +44,7 @@ func TestAuthMiddleware_AllowsValidToken(t *testing.T) {
 func TestRequireRole_VariousRoleTypes(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.GET("/admin", RequireRole("admin"), func(c *gin.Context) { c.Status(http.StatusOK) })
+	r.GET("/admin", mw.RequireRole("admin", []byte("secret")), func(c *gin.Context) { c.Status(http.StatusOK) })
 
 	cases := []struct {
 		name  string
@@ -70,7 +71,7 @@ func TestRequireRole_VariousRoleTypes(t *testing.T) {
 func TestRequireRole_RejectsWrongSigningMethod(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.GET("/admin", RequireRole("admin"), func(c *gin.Context) { c.Status(http.StatusOK) })
+	r.GET("/admin", mw.RequireRole("admin", []byte("secret")), func(c *gin.Context) { c.Status(http.StatusOK) })
 
 	req := httptest.NewRequest(http.MethodGet, "/admin", nil)
 	// craft token that is signed with HS256 but has header alg tampered to RS256 to trigger rejection

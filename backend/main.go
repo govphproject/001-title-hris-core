@@ -151,6 +151,14 @@ func NewRouter(ctx context.Context) *gin.Engine {
 	apipkg.RegisterEmployeeRoutes(apiGroup, employeeRepo)
 	apipkg.RegisterPayrollRoutes(apiGroup, payrollRepo)
 
+	// register department routes (use in-memory repo when mongo not configured)
+	deptRepo := services.NewInMemoryDepartmentRepo()
+	apipkg.RegisterDepartmentRoutes(apiGroup, deptRepo)
+
+	// register recruitment routes
+	recRepo := services.NewInMemoryRecruitmentRepo()
+	apipkg.RegisterRecruitmentRoutes(apiGroup, recRepo)
+
 	// secure endpoints (require JWT)
 	secure := apiGroup.Group("/secure")
 	secure.Use(middleware.AuthMiddleware(jwtSecret))

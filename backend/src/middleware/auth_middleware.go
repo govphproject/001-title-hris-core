@@ -45,7 +45,7 @@ func AuthMiddleware(secret []byte) gin.HandlerFunc {
 	}
 }
 
-// RequireRole checks that the JWT contains the required role
+// RequireRole checks that the JWT contains the required role.
 func RequireRole(role string, secret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		h := c.GetHeader("Authorization")
