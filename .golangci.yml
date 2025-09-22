@@ -13,10 +13,6 @@ linters:
     - varcheck
     - ineffassign
     - deadcode
-
-issues:
-  exclude:
-    - "error return value is not checked.*" # allow some errcheck flex
-linters:
   disable:
     - typecheck
+ 
