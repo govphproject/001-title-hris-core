@@ -56,13 +56,13 @@ func getEnv(key, fallback string) string {
 
 // Optional MongoDB backing
 var (
-	mongoClient *mongo.Client
-	empColl     *mongo.Collection
-	userColl    *mongo.Collection
-	useMongo    bool
-	authStore   services.AuthStore
+	mongoClient  *mongo.Client
+	empColl      *mongo.Collection
+	userColl     *mongo.Collection
+	useMongo     bool
+	authStore    services.AuthStore
 	employeeRepo services.EmployeeRepo
-	payrollRepo services.PayrollRepo
+	payrollRepo  services.PayrollRepo
 )
 
 // simple user model for auth
