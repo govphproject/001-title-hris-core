@@ -1,3 +1,22 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - gofmt
+    - gosimple
+    - unused
+    - structcheck
+    - varcheck
+    - ineffassign
+    - deadcode
+
+issues:
+  exclude:
+    - "error return value is not checked.*" # allow some errcheck flex
 linters:
   disable:
     - typecheck
