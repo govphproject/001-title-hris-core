@@ -1,4 +1,3 @@
-
 package integration
 
 // placeholder: original duplicate test removed. This file intentionally
